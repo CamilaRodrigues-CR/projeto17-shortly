@@ -4,7 +4,7 @@ import db from "../database/connectionDatabase.js";
 
 export async function postUrl(req, res) {
     const { url } = req.body;
-    const session = res.locals.session
+    const session = res.locals.session;
 
     if (!session) return res.status(401).send({ message: "envie um token na requisição!!" })
 
@@ -74,9 +74,31 @@ export async function getRedirectUrl(req, res) {
     }
 }
 
-export async function deleteUrl(req, res) {
+export async function deleteUrl(req, res) {  // rota ('/urls/:id')
+    const { id } = req.params                 // o id é da url ?
+    const session = res.locals.session
+
+
+    if (!session) return res.status(401).send({ message: "envie um token na requisição!!" })   // verificar o token
 
     try {
+
+        // achar a shortUrl do id recebido
+        const findShortUrl = await db.query(`SELECT "shortUrl", "createdByUserId" FROM urls WHERE id = $1;`, [id])
+
+        if (findShortUrl.rowCount === 0) return res.sendStatus(404);   // erro se não encontrar a url encurtada
+
+        //verificar se a url pertence ao usuario (comparar o id session com "createdByUserId")
+        const userId = await db.query(`SELECT "userId" FROM sessions WHERE token = $1;`, [session.rows[0].token])
+
+        if (userId.rows[0].userId === findShortUrl.rows[0].createdByUserId) {
+            await db.query(`DELETE FROM urls WHERE "id" = $1;`, [id])   // fazer a query para o delete
+
+            res.sendStatus(204)
+
+        } else {
+            res.sendStatus(204)
+        }
 
     } catch (err) {
         res.status(500).send(err.message)
