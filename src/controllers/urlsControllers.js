@@ -34,7 +34,7 @@ export async function getUrlById(req, res) {
     const { id } = req.params;
 
     try {
-        const url = await db.query(`SELECT id , "shortUrl", url FROM urls WHERE id = $1;` , [id])
+        const url = await db.query(`SELECT id , "shortUrl", url FROM urls WHERE id = $1;`, [id])
 
         if (url.rowCount === 0) {
             return res.sendStatus(404)
@@ -49,8 +49,25 @@ export async function getUrlById(req, res) {
 
 
 export async function getRedirectUrl(req, res) {
+    //Esta **não é** uma rota autenticada.
+    // Redirecionar o usuário para o link correspondente.
+    //Aumentar um na contagem de visitas do link.
+    //Caso a url encurtada não exista, responder com *status code* `404`.
+    //rota ('/urls/open/:shortUrl')
+    const { shortUrl } = req.params;
 
     try {
+        const url = await db.query(`SELECT url FROM urls WHERE "shortUrl" = $1;`, [shortUrl]);
+
+        if (url.rowCount === 0) {
+            return res.sendStatus(404);
+        } else {
+
+            await db.query(`UPDATE urls SET visits = visits+1 WHERE shortUrl=$1;`, [shortUrl]);
+
+            res.redirect(`/${url.rows[0].url}`)
+
+        }
 
     } catch (err) {
         res.status(500).send(err.message)
