@@ -27,7 +27,8 @@ SET default_table_access_method = heap;
 CREATE TABLE public.sessions (
     id integer NOT NULL,
     token text NOT NULL,
-    "userId" integer
+    "userId" integer,
+    createdat timestamp without time zone DEFAULT now()
 );
 
 
@@ -143,6 +144,8 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.sessions VALUES (1, '80e2fe72-0404-4de4-bd2b-31d762235c11', 2, '2023-09-30 15:12:32.600171');
+INSERT INTO public.sessions VALUES (2, 'd6c67c97-4a6f-4b94-9fde-8cb0fa4b2bc9', 2, '2023-09-30 15:18:40.058756');
 
 
 --
@@ -163,7 +166,7 @@ INSERT INTO public.users VALUES (2, 'João', 'joao@driven.com.br', '$2b$10$AEx/k
 -- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.sessions_id_seq', 3, true);
+SELECT pg_catalog.setval('public.sessions_id_seq', 2, true);
 
 
 --
