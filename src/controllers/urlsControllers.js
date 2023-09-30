@@ -22,7 +22,7 @@ export async function postUrl(req, res) {
         //buscando os dados para mandar na resposta
         const searchUrl = await db.query(`SELECT id, "shortUrl", url FROM urls WHERE url = $1` , [url])
 
-        res.status(200).send(searchUrl.rows[0])
+        res.status(201).send(searchUrl.rows[0])
 
     } catch (err) {
         res.status(500).send(err.message)

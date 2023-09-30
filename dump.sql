@@ -60,7 +60,7 @@ CREATE TABLE public.urls (
     id integer NOT NULL,
     url text NOT NULL,
     "shortUrl" text NOT NULL,
-    "createAt" timestamp without time zone DEFAULT now(),
+    "createdAt" timestamp without time zone DEFAULT now(),
     "createdByUserId" integer NOT NULL,
     visits integer DEFAULT 0
 );
@@ -153,7 +153,6 @@ INSERT INTO public.sessions VALUES (3, '5ba378d1-b4cb-45ed-a525-c6806c1f6a5a', 2
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.urls VALUES (1, 'https://i.pinimg.com/originals/7d/2e/52/7d2e52eccdb9a76020468c7530e35162.jpg', '72Zy0sV4eLRMrnpXQrQMn', '2023-09-30 16:50:38.840218', 2, 0);
 
 
 --
@@ -175,7 +174,7 @@ SELECT pg_catalog.setval('public.sessions_id_seq', 3, true);
 -- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.urls_id_seq', 1, true);
+SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
 
 
 --
