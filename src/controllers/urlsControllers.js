@@ -1,5 +1,6 @@
 export async function postUrl(req, res){
 
+    const session = res.locals.session
     try{
 
     } catch (err){
