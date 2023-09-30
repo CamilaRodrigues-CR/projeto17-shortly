@@ -97,7 +97,7 @@ export async function deleteUrl(req, res) {  // rota ('/urls/:id')
             res.sendStatus(204)
 
         } else {
-            res.sendStatus(204)
+            res.sendStatus(401)
         }
 
     } catch (err) {
