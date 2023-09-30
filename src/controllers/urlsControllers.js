@@ -1,38 +1,59 @@
-export async function postUrl(req, res){
+import { nanoid } from "nanoid";
+import db from "../database/connectionDatabase.js";
 
+
+export async function postUrl(req, res) {
+    const { url } = req.body;
     const session = res.locals.session
-    try{
 
-    } catch (err){
+    if (!session) return res.status(401).send({message: "envie um token na requisição!!"})
+    
+    try {
+        //criar um código encurtado para a url
+        let shortUrl = url
+        shortUrl = nanoid();
+        
+        //buscar o id do usuario para inserir na tabela   
+        const userId = await db.query(`SELECT "userId" FROM sessions WHERE token = $1;`, [session.rows[0].token])
+        
+        //salvar o id, a url original e esse código na tabela urls
+        await db.query(`INSERT INTO urls (url, "shortUrl", "createdByUserId") VALUES ($1, $2, $3);` , [url, shortUrl, userId.rows[0].userId]);        
+        
+        //buscando os dados para mandar na resposta
+        const searchUrl = await db.query(`SELECT id, "shortUrl", url FROM urls WHERE url = $1` , [url])
+
+        res.status(200).send(searchUrl.rows[0])
+
+    } catch (err) {
         res.status(500).send(err.message)
     }
 }
 
 
-export async function getUrlById(req, res){
+export async function getUrlById(req, res) {
 
-    try{
+    try {
 
-    } catch (err){
+    } catch (err) {
         res.status(500).send(err.message)
     }
 }
 
 
-export async function getRedirectUrl(req, res){
+export async function getRedirectUrl(req, res) {
 
-    try{
+    try {
 
-    } catch (err){
+    } catch (err) {
         res.status(500).send(err.message)
     }
 }
 
-export async function deleteUrl(req, res){
+export async function deleteUrl(req, res) {
 
-    try{
+    try {
 
-    } catch (err){
+    } catch (err) {
         res.status(500).send(err.message)
     }
 }

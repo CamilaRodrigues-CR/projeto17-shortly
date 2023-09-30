@@ -59,9 +59,9 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 CREATE TABLE public.urls (
     id integer NOT NULL,
     url text NOT NULL,
-    shorturl text NOT NULL,
-    createdat timestamp without time zone DEFAULT now(),
-    createdbyuserid integer,
+    "shortUrl" text NOT NULL,
+    "createAt" timestamp without time zone DEFAULT now(),
+    "createdByUserId" integer NOT NULL,
     visits integer DEFAULT 0
 );
 
@@ -146,12 +146,14 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 INSERT INTO public.sessions VALUES (1, '80e2fe72-0404-4de4-bd2b-31d762235c11', 2, '2023-09-30 15:12:32.600171');
 INSERT INTO public.sessions VALUES (2, 'd6c67c97-4a6f-4b94-9fde-8cb0fa4b2bc9', 2, '2023-09-30 15:18:40.058756');
+INSERT INTO public.sessions VALUES (3, '5ba378d1-b4cb-45ed-a525-c6806c1f6a5a', 2, '2023-09-30 16:18:53.627394');
 
 
 --
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.urls VALUES (1, 'https://i.pinimg.com/originals/7d/2e/52/7d2e52eccdb9a76020468c7530e35162.jpg', '72Zy0sV4eLRMrnpXQrQMn', '2023-09-30 16:50:38.840218', 2, 0);
 
 
 --
@@ -166,14 +168,14 @@ INSERT INTO public.users VALUES (2, 'João', 'joao@driven.com.br', '$2b$10$AEx/k
 -- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.sessions_id_seq', 2, true);
+SELECT pg_catalog.setval('public.sessions_id_seq', 3, true);
 
 
 --
 -- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
+SELECT pg_catalog.setval('public.urls_id_seq', 1, true);
 
 
 --
@@ -224,11 +226,11 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: urls urls_createdbyuserid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: urls urls_createdByUserId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.urls
-    ADD CONSTRAINT urls_createdbyuserid_fkey FOREIGN KEY (createdbyuserid) REFERENCES public.users(id);
+    ADD CONSTRAINT "urls_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES public.users(id);
 
 
 --
