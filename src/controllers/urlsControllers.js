@@ -63,9 +63,9 @@ export async function getRedirectUrl(req, res) {
             return res.sendStatus(404);
         } else {
 
-            await db.query(`UPDATE urls SET visits = visits+1 WHERE shortUrl=$1;`, [shortUrl]);
+            await db.query(`UPDATE urls SET visits = visits+1 WHERE "shortUrl"=$1;`, [shortUrl]);
 
-            res.redirect(`/${url.rows[0].url}`)
+            res.status(302).redirect(`/${url.rows[0].url}`)
 
         }
 
