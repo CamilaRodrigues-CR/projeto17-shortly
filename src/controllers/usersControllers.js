@@ -1,4 +1,4 @@
-import db from "../database/connectionDatabase.js";
+import { db } from "../database/connectionDatabase.js";
 
 
 export async function getUsers(req, res) {
@@ -17,17 +17,19 @@ export async function getUsers(req, res) {
         const TotalvisitCount = await db.query(`SELECT SUM(visits) AS "visitCount" FROM urls WHERE "createdByUserId" = $1 GROUP BY "createdByUserId";`, [userId.rows[0].userId])
 
         //fazer o retorno das 2 tabelas no formato desejado: 
-                      //(usar o reduce ou invés de map para ter o retorno no formato de objeto e não de array!!!)
+        //(usar o reduce ou invés de map para ter o retorno no formato de objeto e não de array!!!)
         const result = user_url.rows.reduce((acc, u) => {
             const obj = {
                 ...u,
                 visitCount: TotalvisitCount.rows[0].visitCount,
-                shortenedUrls: {
-                    shortUrl: u.shortUrl,
-                    url: u.url,
-                    visitCount: u.visits
+                shortenedUrls: [
+                    {
+                        shortUrl: u.shortUrl,
+                        url: u.url,
+                        visitCount: u.visits
 
-                }
+                    }
+                ]
             }
 
             delete obj.url;
@@ -42,7 +44,7 @@ export async function getUsers(req, res) {
 
         res.status(200).send(result);
 
-        
+
     } catch (err) {
         res.status(500).send(err.message)
     }

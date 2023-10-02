@@ -1,4 +1,4 @@
-import db from "../database/connectionDatabase.js"
+import { db } from "../database/connectionDatabase.js"
 
 export async function getRanking(req, res) {
     //devo retornar um array com os 10 primeiros 
@@ -23,7 +23,7 @@ export async function getRanking(req, res) {
 
             return obj;
         })
-        
+
         res.status(200).send(result)
 
     } catch (err) {
