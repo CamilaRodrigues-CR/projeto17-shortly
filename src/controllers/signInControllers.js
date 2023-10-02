@@ -11,7 +11,7 @@ export async function postSignIn(req, res){
         //verificar se o email recebido já está cadastrado
         const existEmail = await db.query(`SELECT email FROM users WHERE email = $1;`, [email])
         
-        if (existEmail.rowCount === 0 ) return res.status(401).send({message: "Email não cadastrado incorretos"});
+        if (existEmail.rowCount === 0 ) return res.status(401).send({message: "Email não cadastrado"});
 
         //preciso buscar a senha e o email salvos no banco
         const user = await db.query(`SELECT id, email, password FROM users WHERE email = $1;`, [email])

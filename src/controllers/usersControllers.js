@@ -17,12 +17,11 @@ export async function getUsers(req, res) {
         const TotalvisitCount = await db.query(`SELECT SUM(visits) AS "visitCount" FROM urls WHERE "createdByUserId" = $1 GROUP BY "createdByUserId";`, [userId.rows[0].userId])
 
         //fazer o retorno das 2 tabelas no formato desejado:
-        const result = user_url.rows.map(u => {
+        const result = user_url.rows.reduce((acc, u) => {
             const obj = {
                 ...u,
                 TotalvisitCount: TotalvisitCount.rows[0].visitCount,
                 shortenedUrls: {
-                    //id:u.id,
                     shortUrl: u.shortUrl,
                     url: u.url,
                     visitCount: u.visits
@@ -38,10 +37,9 @@ export async function getUsers(req, res) {
 
 
             return obj;
+        }, {});
 
-        });
-
-        res.send(result);
+        res.status(200).send(result);
 
         
     } catch (err) {
@@ -50,6 +48,25 @@ export async function getUsers(req, res) {
 }
 
 /*
+const result = user_url.rows.reduce((acc, u) => {
+  const obj = {
+    ...u,
+    TotalvisitCount: TotalvisitCount.rows[0].visitCount,
+    shortenedUrls: {
+      shortUrl: u.shortUrl,
+      url: u.url,
+      visitCount: u.visits
+    }
+  };
+
+  delete obj.url;
+  delete obj.shortUrl;
+  delete obj.createdByUserId;
+  delete obj.createdAt;
+  delete obj.visits;
+
+  return obj;
+}, {});
   
        {
   id: 3,
