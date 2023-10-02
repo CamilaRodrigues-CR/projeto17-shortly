@@ -11,7 +11,8 @@ export async function getUsers(req, res) {
         const userId = await db.query(`SELECT "userId" FROM sessions WHERE token = $1;`, [session.rows[0].token]);
 
         //preciso fazer um join do usuario com todos os seus links
-        const user_url = await db.query(`SELECT users.id AS "userId", users.name, urls.id AS "urlId", urls.url, urls."shortUrl", urls.visits FROM users JOIN urls ON users.id = urls."createdByUserId" WHERE users.id = $1;`, [userId.rows[0].userId])
+        const user_url = await db.query(`SELECT users.id AS "userId", users.name, urls.id AS "urlId", urls.url, urls."shortUrl", urls.visits 
+        FROM users JOIN urls ON users.id = urls."createdByUserId" WHERE users.id = $1;`, [userId.rows[0].userId])
 
         // preciso somar quantas visitas totais esse usuario tem
         const TotalvisitCount = await db.query(`SELECT SUM(visits) AS "visitCount" FROM urls WHERE "createdByUserId" = $1 GROUP BY "createdByUserId";`, [userId.rows[0].userId])
