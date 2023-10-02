@@ -19,37 +19,29 @@ export async function getUsers(req, res) {
 
         //fazer o retorno das 2 tabelas no formato desejado: 
         //(usar o reduce ou invés de map para ter o retorno no formato de objeto e não de array!!!)
-        const result = user_url.rows.map(u  => {
-            const obj = {
+
+        const result = user_url.rows.reduce((acc, u) => {
+                const shortenedUrl = {
+                    id: u.urlId,
+                    shortUrl: u.shortUrl,
+                    url: u.url,
+                    visitCount: u.visits
+                };
+        
+                acc.shortenedUrls.push(shortenedUrl);
+                return acc;
+            }, {
                 id: userId.rows[0].userId,
-                ...u,
+                name: user_url.rows[0].name,
                 visitCount: TotalvisitCount.rows[0].visitCount,
-                shortenedUrls: [
-                    {
-                        id: u.urlId,
-                        shortUrl: u.shortUrl,
-                        url: u.url,
-                        visitCount: u.visits
-
-                    }
-                ]
-            }
-            delete obj.userId;
-            delete obj.urlId;
-            delete obj.url;
-            delete obj.shortUrl;
-            delete obj.createdByUserId;
-            delete obj.createdAt;
-            delete obj.visits
-
-
-            return obj;
-        }, {});
-
-        res.status(200).send(result);
+                shortenedUrls: []
+            });
+            res.status(200).send(result);
 
 
     } catch (err) {
         res.status(500).send(err.message)
     }
 }
+
+
