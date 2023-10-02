@@ -19,7 +19,7 @@ export async function getUsers(req, res) {
 
         //fazer o retorno das 2 tabelas no formato desejado: 
         //(usar o reduce ou invés de map para ter o retorno no formato de objeto e não de array!!!)
-        const result = user_url.rows.reduce((acc, u) => {
+        const result = user_url.rows.map(u  => {
             const obj = {
                 id: userId.rows[0].userId,
                 ...u,
