@@ -16,11 +16,12 @@ export async function getUsers(req, res) {
         // preciso somar quantas visitas totais esse usuario tem
         const TotalvisitCount = await db.query(`SELECT SUM(visits) AS "visitCount" FROM urls WHERE "createdByUserId" = $1 GROUP BY "createdByUserId";`, [userId.rows[0].userId])
 
-        //fazer o retorno das 2 tabelas no formato desejado:
+        //fazer o retorno das 2 tabelas no formato desejado: 
+                      //(usar o reduce ou invés de map para ter o retorno no formato de objeto e não de array!!!)
         const result = user_url.rows.reduce((acc, u) => {
             const obj = {
                 ...u,
-                TotalvisitCount: TotalvisitCount.rows[0].visitCount,
+                visitCount: TotalvisitCount.rows[0].visitCount,
                 shortenedUrls: {
                     shortUrl: u.shortUrl,
                     url: u.url,
@@ -46,39 +47,3 @@ export async function getUsers(req, res) {
         res.status(500).send(err.message)
     }
 }
-
-/*
-const result = user_url.rows.reduce((acc, u) => {
-  const obj = {
-    ...u,
-    TotalvisitCount: TotalvisitCount.rows[0].visitCount,
-    shortenedUrls: {
-      shortUrl: u.shortUrl,
-      url: u.url,
-      visitCount: u.visits
-    }
-  };
-
-  delete obj.url;
-  delete obj.shortUrl;
-  delete obj.createdByUserId;
-  delete obj.createdAt;
-  delete obj.visits;
-
-  return obj;
-}, {});
-  
-       {
-  id: 3,
-  name: 'João',
-  email: 'joao@driven.com.br',
-  password: '$2b$10$AEx/kNrh3trxsac9YvTfL.l4iyZid926MxL020b6jyjMN6vfrcM82',
-  createdat: 2023-09-30T14:52:10.883Z,
-  url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOymDnSJ8A29IxPaq86wB7os59kt6Dbv1CwQ&usqp=CAU',
-  shortUrl: '2wIeoe6VPe-YjEPfyUq2U',
-  createdAt: 2023-10-02T14:52:11.932Z,
-  createdByUserId: 2,
-  visits: 0
-}
-
-  */
