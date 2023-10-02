@@ -28,7 +28,7 @@ CREATE TABLE public.sessions (
     id integer NOT NULL,
     token text NOT NULL,
     "userId" integer,
-    createdat timestamp without time zone DEFAULT now()
+    "“createdat”" timestamp without time zone DEFAULT now()
 );
 
 
@@ -58,10 +58,10 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 CREATE TABLE public.urls (
     id integer NOT NULL,
+    "“shorturl”" text NOT NULL,
     url text NOT NULL,
-    "shortUrl" text NOT NULL,
-    "createdAt" timestamp without time zone DEFAULT now(),
-    "createdByUserId" integer NOT NULL,
+    "“createdat”" timestamp without time zone DEFAULT now(),
+    "“createdbyuserid”" integer,
     visits integer DEFAULT 0
 );
 
@@ -95,7 +95,7 @@ CREATE TABLE public.users (
     name text NOT NULL,
     email text NOT NULL,
     password text NOT NULL,
-    createdat timestamp without time zone DEFAULT now()
+    "“createdat”" timestamp without time zone DEFAULT now()
 );
 
 
@@ -144,9 +144,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.sessions VALUES (1, '80e2fe72-0404-4de4-bd2b-31d762235c11', 2, '2023-09-30 15:12:32.600171');
-INSERT INTO public.sessions VALUES (2, 'd6c67c97-4a6f-4b94-9fde-8cb0fa4b2bc9', 2, '2023-09-30 15:18:40.058756');
-INSERT INTO public.sessions VALUES (3, '5ba378d1-b4cb-45ed-a525-c6806c1f6a5a', 2, '2023-09-30 16:18:53.627394');
 
 
 --
@@ -159,15 +156,13 @@ INSERT INTO public.sessions VALUES (3, '5ba378d1-b4cb-45ed-a525-c6806c1f6a5a', 2
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users VALUES (1, 'fulana', 'fulana@driven.com.br', '$2b$10$PnmasK0of3FEyKa62YFB3O8l5kjSPn2yNw/LUI2aMGm/y4c3qydJS', '2023-09-29 18:42:02.122869');
-INSERT INTO public.users VALUES (2, 'João', 'joao@driven.com.br', '$2b$10$AEx/kNrh3trxsac9YvTfL.l4iyZid926MxL020b6jyjMN6vfrcM82', '2023-09-30 11:52:10.88318');
 
 
 --
 -- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.sessions_id_seq', 3, true);
+SELECT pg_catalog.setval('public.sessions_id_seq', 1, false);
 
 
 --
@@ -181,7 +176,7 @@ SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 2, true);
+SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
@@ -225,11 +220,11 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: urls urls_createdByUserId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: urls urls_“createdbyuserid”_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.urls
-    ADD CONSTRAINT "urls_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES public.users(id);
+    ADD CONSTRAINT "urls_“createdbyuserid”_fkey" FOREIGN KEY ("“createdbyuserid”") REFERENCES public.users(id);
 
 
 --

@@ -49,7 +49,6 @@ export async function getUrlById(req, res) {
 
 
 export async function getRedirectUrl(req, res) {
-    //Esta **não é** uma rota autenticada.
     // Redirecionar o usuário para o link correspondente.
     //Aumentar um na contagem de visitas do link.
     //Caso a url encurtada não exista, responder com *status code* `404`.
