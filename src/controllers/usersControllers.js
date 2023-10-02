@@ -11,7 +11,7 @@ export async function getUsers(req, res) {
         const userId = await db.query(`SELECT "userId" FROM sessions WHERE token = $1;`, [session.rows[0].token]);
 
         //preciso fazer um join do usuario com todos os seus links
-        const user_url = await db.query(`SELECT users.*, urls.* FROM users JOIN urls ON users.id = urls."createdByUserId" WHERE users.id = $1;`, [userId.rows[0].userId])
+        const user_url = await db.query(`SELECT users.id, users.name, urls.* FROM users JOIN urls ON users.id = urls."createdByUserId" WHERE users.id = $1;`, [userId.rows[0].userId])
 
         // preciso somar quantas visitas totais esse usuario tem
         const TotalvisitCount = await db.query(`SELECT SUM(visits) AS "visitCount" FROM urls WHERE "createdByUserId" = $1 GROUP BY "createdByUserId";`, [userId.rows[0].userId])
@@ -22,7 +22,7 @@ export async function getUsers(req, res) {
                 ...u,
                 TotalvisitCount: TotalvisitCount.rows[0].visitCount,
                 shortenedUrls: {
-                    // id:u.urls.id,
+                    //id:u.id,
                     shortUrl: u.shortUrl,
                     url: u.url,
                     visitCount: u.visits
@@ -30,8 +30,6 @@ export async function getUsers(req, res) {
                 }
             }
 
-            delete obj.email;
-            delete obj.password;
             delete obj.url;
             delete obj.shortUrl;
             delete obj.createdByUserId;

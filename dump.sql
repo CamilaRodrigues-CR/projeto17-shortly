@@ -28,7 +28,7 @@ CREATE TABLE public.sessions (
     id integer NOT NULL,
     token text NOT NULL,
     "userId" integer,
-    "“createdat”" timestamp without time zone DEFAULT now()
+    createdat timestamp without time zone DEFAULT now()
 );
 
 
@@ -58,10 +58,10 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 CREATE TABLE public.urls (
     id integer NOT NULL,
-    "“shorturl”" text NOT NULL,
     url text NOT NULL,
-    "“createdat”" timestamp without time zone DEFAULT now(),
-    "“createdbyuserid”" integer,
+    "shortUrl" text NOT NULL,
+    "createdAt" timestamp without time zone DEFAULT now(),
+    "createdByUserId" integer NOT NULL,
     visits integer DEFAULT 0
 );
 
@@ -95,7 +95,7 @@ CREATE TABLE public.users (
     name text NOT NULL,
     email text NOT NULL,
     password text NOT NULL,
-    "“createdat”" timestamp without time zone DEFAULT now()
+    "createdAt" timestamp without time zone DEFAULT now()
 );
 
 
@@ -196,14 +196,6 @@ ALTER TABLE ONLY public.urls
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_email_key UNIQUE (email);
-
-
---
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -220,11 +212,11 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: urls urls_“createdbyuserid”_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: urls urls_createdByUserId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.urls
-    ADD CONSTRAINT "urls_“createdbyuserid”_fkey" FOREIGN KEY ("“createdbyuserid”") REFERENCES public.users(id);
+    ADD CONSTRAINT "urls_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES public.users(id);
 
 
 --
